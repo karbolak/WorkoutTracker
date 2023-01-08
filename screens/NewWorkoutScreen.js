@@ -14,6 +14,7 @@ import * as SQLite from "expo-sqlite";
 const NewWorkoutScreen = (navigation) => {
   const db = SQLite.openDatabase("MyDatabase.db");
   const [tempId, setTempID] = useState(-1);
+  const [tempName, setTempName] = useState("");
   const [items, setItems] = useState([]);
   const [workoutz, setWorkoutz] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +29,7 @@ const NewWorkoutScreen = (navigation) => {
 
     db.transaction((tx) => {
       tx.executeSql(
-        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, work_name TEXT, ex_1 INTEGER);`
+        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, work_name TEXT, ex_1 TEXT);`
       );
     });
 
@@ -52,21 +53,32 @@ const NewWorkoutScreen = (navigation) => {
     setLoading(false);
   }, []);
 
-  const addItem = (id) => {
-    setTempID(id);
+  /*
+  db.transaction((tx) => {
+    tx.executeSql(
+      "SELECT name FROM items WHERE id = ?",
+      [tempId],
+      null,
+      (txObj, resultSet) => setTempName(resultSet.rows._array[0]),
+      (txObj, error) => console.log(error)
+    );
+  });
+*/
+  const addItem = (name) => {
+    setTempName(name);
   };
 
   const addWorkoutz = () => {
     db.transaction((tx) => {
       tx.executeSql(
         "INSERT INTO workoutz (work_name, ex_1) values (?, ?);",
-        [workoutName, tempId],
+        [workoutName, tempName],
         (txObj, resultSet) => {
           const newWorkoutz = [
             ...workoutz,
             {
               work_name: workoutName,
-              ex_1: tempId,
+              ex_1: tempName,
             },
           ];
           setWorkoutz(newWorkoutz);
@@ -87,7 +99,7 @@ const NewWorkoutScreen = (navigation) => {
       <ScrollView>
         {items.map((item) => (
           <View key={item.id} style={styles.exerciseView}>
-            <TouchableOpacity key={item.id} onPress={() => addItem(item.id)}>
+            <TouchableOpacity key={item.id} onPress={() => addItem(item.name)}>
               <Text>{item.id}</Text>
               <Text>{item.name}</Text>
               <Text>{item.type}</Text>

@@ -17,7 +17,7 @@ const HistoryScreen = (navigation) => {
   useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
-        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, work_name TEXT, ex_1 INTEGER);`
+        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, work_name TEXT, ex_1 TEXT);`
       );
     });
 
@@ -41,11 +41,13 @@ const HistoryScreen = (navigation) => {
         ) : (
           <>
             {workoutz.map((workout) => (
-              <View key={workout.work_id} style={styles.exerciseView}>
-                <Text>{workout.work_id}</Text>
-                <Text>{workout.work_name}</Text>
-                <Text>{workout.ex_1}</Text>
-              </View>
+              <ScrollView>
+                <View key={workout.work_id} style={styles.exerciseView}>
+                  <Text>{workout.work_id}</Text>
+                  <Text>{workout.work_name}</Text>
+                  <Text>{workout.ex_1}</Text>
+                </View>
+              </ScrollView>
             ))}
           </>
         )}

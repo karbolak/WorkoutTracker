@@ -14,6 +14,7 @@ import * as SQLite from "expo-sqlite";
 const NewWorkoutScreen = (navigation) => {
   const db = SQLite.openDatabase("MyDatabase.db");
   const [tempId, setTempID] = useState(-1);
+  const [tempName, setTempName] = useState("");
   const [items, setItems] = useState([]);
   const [workoutz, setWorkoutz] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +29,7 @@ const NewWorkoutScreen = (navigation) => {
 
     db.transaction((tx) => {
       tx.executeSql(
-        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, work_name TEXT, ex_1 INTEGER);`
+        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, work_name TEXT, ex_1 TEXT);`
       );
     });
 
@@ -52,6 +53,19 @@ const NewWorkoutScreen = (navigation) => {
     setLoading(false);
   }, []);
 
+  function idToName(tx) {
+    tx.executeSql(
+      "SELECT name FROM items WHERE id = ?",
+      [tempId],
+      querySuccess,
+      errorDB
+    );
+  }
+
+  function querySuccess(tx, results) {
+    setTempName(results.rows.item(0).xrate);
+  }
+
   const addItem = (id) => {
     setTempID(id);
   };
@@ -60,7 +74,7 @@ const NewWorkoutScreen = (navigation) => {
     db.transaction((tx) => {
       tx.executeSql(
         "INSERT INTO workoutz (work_name, ex_1) values (?, ?);",
-        [workoutName, tempId],
+        [workoutName, tempName],
         (txObj, resultSet) => {
           const newWorkoutz = [
             ...workoutz,

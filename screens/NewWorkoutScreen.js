@@ -53,17 +53,6 @@ const NewWorkoutScreen = (navigation) => {
     setLoading(false);
   }, []);
 
-  /*
-  db.transaction((tx) => {
-    tx.executeSql(
-      "SELECT name FROM items WHERE id = ?",
-      [tempId],
-      null,
-      (txObj, resultSet) => setTempName(resultSet.rows._array[0]),
-      (txObj, error) => console.log(error)
-    );
-  });
-*/
   const addItem = (name) => {
     setTempName(name);
   };

@@ -6,11 +6,10 @@ import {
   TextInput,
   StyleSheet,
   ScrollView,
-  Table,
-  TableRow,
-  TableCell,
+  Linking,
 } from "react-native";
 import * as SQLite from "expo-sqlite";
+import { color } from "react-native-reanimated";
 
 const ExercisesScreen = (navigation) => {
   const [database, setDatabase] = useState();
@@ -92,7 +91,7 @@ const ExercisesScreen = (navigation) => {
         style={button.input}
         onChangeText={setExerciseDescription}
         value={exerciseDescription}
-        placeholder="Exercise Description"
+        placeholder="Exercise YT Link"
         keyboardType="text"
       />
       <Button title="Add Item" onPress={addItem} />
@@ -103,7 +102,12 @@ const ExercisesScreen = (navigation) => {
             <Text>{item.id}</Text>
             <Text>{item.name}</Text>
             <Text>{item.type}</Text>
-            <Text>{item.description}</Text>
+            <Text
+              style={styles.textStyle}
+              onPress={() => Linking.openURL(item.description)}
+            >
+              {item.description}
+            </Text>
           </View>
         ))}
       </ScrollView>
@@ -127,6 +131,10 @@ const styles = StyleSheet.create({
   exerciseView: {
     borderBottomColor: "black",
     borderBottomWidth: 2,
+  },
+  textStyle: {
+    textDecorationLine: "underline",
+    color: "blue",
   },
 });
 

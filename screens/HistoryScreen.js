@@ -41,11 +41,13 @@ const HistoryScreen = (navigation) => {
         ) : (
           <>
             {workoutz.map((workout) => (
-              <View key={workout.work_id} style={styles.exerciseView}>
-                <Text>{workout.work_id}</Text>
-                <Text>{workout.work_name}</Text>
-                <Text>{workout.ex_1}</Text>
-              </View>
+              <ScrollView>
+                <View key={workout.work_id} style={styles.exerciseView}>
+                  <Text>{workout.work_id}</Text>
+                  <Text>{workout.work_name}</Text>
+                  <Text>{workout.ex_1}</Text>
+                </View>
+              </ScrollView>
             ))}
           </>
         )}

@@ -53,21 +53,19 @@ const NewWorkoutScreen = (navigation) => {
     setLoading(false);
   }, []);
 
-  function idToName(tx) {
+  /*
+  db.transaction((tx) => {
     tx.executeSql(
       "SELECT name FROM items WHERE id = ?",
       [tempId],
-      querySuccess,
-      errorDB
+      null,
+      (txObj, resultSet) => setTempName(resultSet.rows._array[0]),
+      (txObj, error) => console.log(error)
     );
-  }
-
-  function querySuccess(tx, results) {
-    setTempName(results.rows.item(0).xrate);
-  }
-
-  const addItem = (id) => {
-    setTempID(id);
+  });
+*/
+  const addItem = (name) => {
+    setTempName(name);
   };
 
   const addWorkoutz = () => {
@@ -80,7 +78,7 @@ const NewWorkoutScreen = (navigation) => {
             ...workoutz,
             {
               work_name: workoutName,
-              ex_1: tempId,
+              ex_1: tempName,
             },
           ];
           setWorkoutz(newWorkoutz);
@@ -101,7 +99,7 @@ const NewWorkoutScreen = (navigation) => {
       <ScrollView>
         {items.map((item) => (
           <View key={item.id} style={styles.exerciseView}>
-            <TouchableOpacity key={item.id} onPress={() => addItem(item.id)}>
+            <TouchableOpacity key={item.id} onPress={() => addItem(item.name)}>
               <Text>{item.id}</Text>
               <Text>{item.name}</Text>
               <Text>{item.type}</Text>

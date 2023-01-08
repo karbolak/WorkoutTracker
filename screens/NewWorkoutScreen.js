@@ -3,12 +3,9 @@ import {
   Button,
   View,
   Text,
+  TextInput,
   StyleSheet,
   ScrollView,
-  Items,
-  Table,
-  TableRow,
-  TableCell,
   TouchableOpacity,
   Settings,
 } from "react-native";
@@ -16,21 +13,22 @@ import * as SQLite from "expo-sqlite";
 
 const NewWorkoutScreen = (navigation) => {
   const db = SQLite.openDatabase("MyDatabase.db");
-  const [TempId, setTempID] = useState(-1);
+  const [tempId, setTempID] = useState(-1);
   const [items, setItems] = useState([]);
-  const [Workoutz, setWorkoutz] = useState([]);
+  const [workoutz, setWorkoutz] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [workoutName, setWorkoutName] = React.useState(null);
 
   useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
-        `CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY NOT NULL, name TEXT, type TEXT, description TEXT);`
+        `CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY NOT NULL AUTOINCREMENT, name TEXT, type TEXT, description TEXT);`
       );
     });
 
     db.transaction((tx) => {
       tx.executeSql(
-        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL, work_name TEXT, ex_1 INTEGER);`
+        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, work_name TEXT, ex_1 INTEGER);`
       );
     });
 
@@ -59,87 +57,58 @@ const NewWorkoutScreen = (navigation) => {
   };
 
   const addWorkoutz = () => {
-    const WorkID = 2;
-    const WorkNAM = `Test`;
-
     db.transaction((tx) => {
       tx.executeSql(
-        "INSERT INTO workoutz (work_id, work_name, ex_1) values (?, ?, ?);",
-        [WorkID, WorkNAM, TempId],
+        "INSERT INTO workoutz (work_name, ex_1) values (?, ?);",
+        [workoutName, tempId],
         (txObj, resultSet) => {
           const newWorkoutz = [
-            ...Workoutz,
+            ...workoutz,
             {
-              work_id: WorkID,
-              work_name: WorkNAM,
-              ex_1: TempId,
+              work_name: workoutName,
+              ex_1: tempId,
             },
           ];
-          console.log({ newWorkoutz, Workoutz });
           setWorkoutz(newWorkoutz);
         }
       );
     });
   };
 
-  console.log(Workoutz);
   return (
-    <View
-      style={{
-        flexDirection: "column",
-        flex: 1,
-      }}
-    >
-      <View
-        style={{
-          flex: 2,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          padding: 10,
-        }}
-      >
-        <ScrollView>
-          {items.map((item) => (
-            <View key={item.id} style={styles.exerciseView}>
-              <TouchableOpacity key={item.id} onPress={() => addItem(item.id)}>
-                <Text>{item.id}</Text>
-                <Text>{item.name}</Text>
-                <Text>{item.type}</Text>
-                <Text>{item.description}</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
-        </ScrollView>
-      </View>
-
-      <View
-        style={{
-          flex: 2,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          padding: 10,
-        }}
-      >
-        <ScrollView>
-          {loading ? (
-            <Text>"Text"</Text>
-          ) : (
-            <>
-              {Workoutz.map((Workout) => (
-                <View key={Workout.work_id} style={styles.exerciseView}>
-                  <Text>{Workout.work_id}</Text>
-                  <Text>{Workout.work_name}</Text>
-                  <Text>{Workout.ex_1}</Text>
-                </View>
-              ))}
-            </>
-          )}
-        </ScrollView>
-        <Button title="Add Workout" onPress={addWorkoutz} />
-      </View>
+    <View>
+      <TextInput
+        style={button.input}
+        onChangeText={setWorkoutName}
+        value={workoutName}
+        placeholder="Workout Name"
+        keyboardType="text"
+      />
+      <ScrollView>
+        {items.map((item) => (
+          <View key={item.id} style={styles.exerciseView}>
+            <TouchableOpacity key={item.id} onPress={() => addItem(item.id)}>
+              <Text>{item.id}</Text>
+              <Text>{item.name}</Text>
+              <Text>{item.type}</Text>
+              <Text>{item.description}</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+      </ScrollView>
+      <Button title="Add Workout" onPress={addWorkoutz} />
     </View>
   );
 };
+
+const button = StyleSheet.create({
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+});
 
 const styles = StyleSheet.create({
   tableHeader: {

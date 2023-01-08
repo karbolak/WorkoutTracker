@@ -3,6 +3,7 @@ import {
   Button,
   View,
   Text,
+  TextInput,
   StyleSheet,
   ScrollView,
   Table,
@@ -14,6 +15,9 @@ import * as SQLite from "expo-sqlite";
 const ExercisesScreen = (navigation) => {
   const [database, setDatabase] = useState();
   const [items, setItems] = useState([]);
+  const [exerciseName, setExerciseName] = React.useState(null);
+  const [exerciseType, setExerciseType] = React.useState(null);
+  const [exerciseDescription, setExerciseDescription] = React.useState(null);
 
   useEffect(() => {
     if (!database) {
@@ -27,7 +31,7 @@ const ExercisesScreen = (navigation) => {
       database.transaction(
         (tx) => {
           tx.executeSql(
-            "create table if not exists Items (id integer primary key not null, name text, type text, description text);"
+            "create table if not exists items (id integer primary key not null AUTOINCREMENT, name text, type text, description text);"
           );
         },
         null,
@@ -38,7 +42,7 @@ const ExercisesScreen = (navigation) => {
 
   const loadItems = () => {
     database.transaction((tx) => {
-      tx.executeSql("select * from Items;", [], (_, { rows: { _array } }) => {
+      tx.executeSql("select * from items;", [], (_, { rows: { _array } }) => {
         setItems(_array);
         console.log(_array);
       });
@@ -46,16 +50,11 @@ const ExercisesScreen = (navigation) => {
   };
 
   const addItem = () => {
-    const id = 2;
-    const name = `MAMA`;
-    const type = "MAMA";
-    const description = "Up and down";
-
     database.transaction(
       (tx) => {
         tx.executeSql(
-          "insert into Items (id, name, type, description) values (?, ?, ?, ?);",
-          [id, name, type, description]
+          "insert into items (name, type, description) values (?, ?, ?);",
+          [exerciseName, exerciseType, exerciseDescription]
         );
       },
       null,
@@ -75,6 +74,27 @@ const ExercisesScreen = (navigation) => {
 
   return (
     <View>
+      <TextInput
+        style={button.input}
+        onChangeText={setExerciseName}
+        value={exerciseName}
+        placeholder="Exercise Name"
+        keyboardType="text"
+      />
+      <TextInput
+        style={button.input}
+        onChangeText={setExerciseType}
+        value={exerciseType}
+        placeholder="Exercise Type"
+        keyboardType="text"
+      />
+      <TextInput
+        style={button.input}
+        onChangeText={setExerciseDescription}
+        value={exerciseDescription}
+        placeholder="Exercise Description"
+        keyboardType="text"
+      />
       <Button title="Add Item" onPress={addItem} />
       <Button title="Wipe Items" onPress={wipeItems} />
       <ScrollView>
@@ -90,6 +110,15 @@ const ExercisesScreen = (navigation) => {
     </View>
   );
 };
+
+const button = StyleSheet.create({
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+});
 
 const styles = StyleSheet.create({
   tableHeader: {

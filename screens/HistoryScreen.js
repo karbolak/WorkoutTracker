@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { Button, View, Text, StyleSheet, ScrollView } from "react-native";
 import * as SQLite from "expo-sqlite";
 
 const HistoryScreen = (navigation) => {
@@ -7,6 +7,12 @@ const HistoryScreen = (navigation) => {
   const [tempId, setTempID] = useState(-1);
   const [workoutz, setWorkoutz] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const wipeWorkouts = () => {
+    db.transaction((tx) => {
+      tx.executeSql("DELETE FROM workoutz;");
+    });
+  };
 
   useEffect(() => {
     db.transaction((tx) => {
@@ -28,6 +34,7 @@ const HistoryScreen = (navigation) => {
 
   return (
     <View>
+      <Button title="Wipe Workouts" onPress={wipeWorkouts} />
       <ScrollView>
         {loading ? (
           <Text>"Loading..."</Text>

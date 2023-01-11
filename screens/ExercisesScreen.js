@@ -46,8 +46,6 @@ const ExercisesScreen = (navigation) => {
   };
 
   const addItem = () => {
-    // Generate a random ID
-    //const id = Math.floor(Math.random() * 100000);
     const id = 1;
     const name = `Push up`;
     const type = "Arms";
@@ -74,11 +72,11 @@ const ExercisesScreen = (navigation) => {
       loadItems
     );
   };
-  //      <Button title="Add Item" onPress={addItem} />
-  //<Button title="Wipe Items" onPress={wipeItems} />
 
   return (
     <View>
+      <Button title="Add Item" onPress={addItem} />
+      <Button title="Wipe Items" onPress={wipeItems} />
       <ScrollView>
         {items.map((item) => (
           <View key={item.id} style={styles.exerciseView}>
@@ -88,39 +86,6 @@ const ExercisesScreen = (navigation) => {
             <Text>{item.description}</Text>
           </View>
         ))}
-
-        {/* <Table>
-          <TableRow>
-            <TableCell>
-              <Text style={styles.tableHeader}>ID</Text>
-            </TableCell>
-            <TableCell>
-              <Text style={styles.tableHeader}>Name</Text>
-            </TableCell>
-            <TableCell>
-              <Text style={styles.tableHeader}>Type</Text>
-            </TableCell>
-            <TableCell>
-              <Text style={styles.tableHeader}>Description</Text>
-            </TableCell>
-          </TableRow>
-          {items.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>
-                <Text>{item.id}</Text>
-              </TableCell>
-              <TableCell>
-                <Text>{item.name}</Text>
-              </TableCell>
-              <TableCell>
-                <Text>{item.type}</Text>
-              </TableCell>
-              <TableCell>
-                <Text>{item.description}</Text>
-              </TableCell>
-            </TableRow>
-          ))}
-        </Table> */}
       </ScrollView>
     </View>
   );

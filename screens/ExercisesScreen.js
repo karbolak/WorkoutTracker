@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
 import {
   Button,
   View,
@@ -10,6 +10,9 @@ import {
 } from "react-native";
 import * as SQLite from "expo-sqlite";
 import { color } from "react-native-reanimated";
+
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const ExercisesScreen = (navigation) => {
   const [database, setDatabase] = useState();
@@ -73,6 +76,12 @@ const ExercisesScreen = (navigation) => {
 
   return (
     <View>
+      <View style={styles.container}>
+        <Button
+          title="Navigate to delete"
+          onPress={() => navigation.navigate("AddNewExerciseScreen")}
+        />
+      </View>
       <TextInput
         style={button.input}
         onChangeText={setExerciseName}

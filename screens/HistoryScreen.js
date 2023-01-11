@@ -4,7 +4,6 @@ import * as SQLite from "expo-sqlite";
 
 const HistoryScreen = (navigation) => {
   const db = SQLite.openDatabase("MyDatabase.db");
-  const [tempId, setTempID] = useState(-1);
   const [workoutz, setWorkoutz] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,7 +16,7 @@ const HistoryScreen = (navigation) => {
   useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
-        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, work_name TEXT, ex_1 TEXT);`
+        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, work_name TEXT, ex_1 TEXT, ex_2 TEXT);`
       );
     });
 
@@ -46,6 +45,7 @@ const HistoryScreen = (navigation) => {
                   <Text>{workout.work_id}</Text>
                   <Text>{workout.work_name}</Text>
                   <Text>{workout.ex_1}</Text>
+                  <Text>{workout.ex_2}</Text>
                 </View>
               </ScrollView>
             ))}

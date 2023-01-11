@@ -41,8 +41,8 @@ export default function Apk() {
         <Tab.Screen name="Start" component={HomeScreen} />
         <Tab.Screen
           name="Ćwiczenia"
-          // component={AddNewExerciseScreenNavigator}
-          component={ExercisesScreen}
+          component={AddNewExerciseScreenNavigator}
+          //component={ExercisesScreen}
         />
         <Tab.Screen name="Nowy Trening" component={NewWorkoutScreen} />
         <Tab.Screen name="Historia" component={HistoryScreen} />

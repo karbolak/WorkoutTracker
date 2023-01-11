@@ -1,6 +1,9 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import ExercisesScreen from "./screens/ExercisesScreen";
 import AddNewExerciseScreen from "./screens/AddNewExerciseScreen";
 

@@ -28,8 +28,6 @@ const NewWorkoutScreen = (navigation) => {
 
   // declaring state variable used to store the name of one of the exercises chosen by the user
   const [tempEx1, setTempEx1] = useState("");
-  // declaring state variable used to store the name of one of the exercises chosen by the user
-  const [tempEx2, setTempEx2] = useState("");
   // declaring state variable used for holding the data extracted from the table "items"
   const [items, setItems] = useState([]);
   // declaring state variable used for holding the data extracted from the table "workoutz"
@@ -53,7 +51,7 @@ const NewWorkoutScreen = (navigation) => {
       tx.executeSql(
         /* this operation creates the table "workoutz" only if it hasn't been created before,
         with id created automatically by the database */
-        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, work_name TEXT, ex_1 TEXT, ex_2 TEXT);`
+        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, work_name TEXT, ex_1 TEXT);`
       );
     });
 
@@ -78,27 +76,24 @@ const NewWorkoutScreen = (navigation) => {
     });
   }, []);
 
-  /* this function sets the value of tempEx1 and tempEx2,
+  /* this function sets the value of tempEx1,
   by giving it the value of the name of the exercise that the user clicked on */
   const addItem = (name) => {
     setTempEx1(name);
-    setTempEx2(name);
   };
 
   // function "addWorkoutz" inserts all the values inputted by the user into the "workoutz" table
   const addWorkoutz = () => {
     db.transaction((tx) => {
       tx.executeSql(
-        "INSERT INTO workoutz (work_name, ex_1, ex_2) values (?, ?, ?);",
-        [workoutName, tempEx1, tempEx2],
+        "INSERT INTO workoutz (work_name, ex_1) values (?, ?);",
+        [workoutName, tempEx1],
         (txObj, resultSet) => {
-          // ??????????????????????????
           const newWorkoutz = [
             ...workoutz,
             {
               work_name: workoutName,
               ex_1: tempEx1,
-              ex_2: tempEx2,
             },
           ];
           setWorkoutz(newWorkoutz);

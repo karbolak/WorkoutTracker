@@ -30,7 +30,7 @@ const HistoryScreen = (navigation) => {
       /* this operation creates the table "workoutz" only if it hasn't been created before,
           with id created automatically by the database */
       tx.executeSql(
-        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, work_name TEXT, ex_1 TEXT, ex_2 TEXT);`
+        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, work_name TEXT, ex_1 TEXT);`
       );
     });
 
@@ -79,7 +79,6 @@ const HistoryScreen = (navigation) => {
                   <Text>{workout.work_id}</Text>
                   <Text>{workout.work_name}</Text>
                   <Text>{workout.ex_1}</Text>
-                  <Text>{workout.ex_2}</Text>
                 </View>
               </ScrollView>
             ))}

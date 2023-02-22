@@ -6,8 +6,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import HomeScreen from "./screens/HomeScreen";
 import NewWorkoutScreen from "./screens/NewWorkoutScreen";
 import HistoryScreen from "./screens/HistoryScreen";
-import StatsScreen from "./screens/StatsScreen";
-import AddNewExerciseScreenNavigator from "./CustomNavigation";
 import ExercisesScreen from "./screens/ExercisesScreen";
 
 const Tab = createBottomTabNavigator();
@@ -20,16 +18,14 @@ export default function Apk() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === "Start") {
+            if (route.name === "Home") {
               iconName = focused ? "home" : "home-outline";
-            } else if (route.name === "Ćwiczenia") {
+            } else if (route.name === "Exercises") {
               iconName = focused ? "list" : "list-outline";
-            } else if (route.name === "Nowy Trening") {
+            } else if (route.name === "New Workout") {
               iconName = focused ? "add-circle" : "add-circle-outline";
-            } else if (route.name === "Historia") {
+            } else if (route.name === "History") {
               iconName = focused ? "time" : "time-outline";
-            } else if (route.name === "Statystyki") {
-              iconName = focused ? "stats-chart" : "stats-chart-outline";
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -38,15 +34,10 @@ export default function Apk() {
           tabBarInactiveTintColor: "gray",
         })}
       >
-        <Tab.Screen name="Start" component={HomeScreen} />
-        <Tab.Screen
-          name="Ćwiczenia"
-          // component={AddNewExerciseScreenNavigator}
-          component={ExercisesScreen}
-        />
-        <Tab.Screen name="Nowy Trening" component={NewWorkoutScreen} />
-        <Tab.Screen name="Historia" component={HistoryScreen} />
-        <Tab.Screen name="Statystyki" component={StatsScreen} />
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Exercises" component={ExercisesScreen} />
+        <Tab.Screen name="New Workout" component={NewWorkoutScreen} />
+        <Tab.Screen name="History" component={HistoryScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

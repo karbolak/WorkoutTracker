@@ -72,7 +72,7 @@ const NewWorkoutScreen = (navigation) => {
           </View>
         ))}
       </ScrollView>
-      <Button title="Add Workout" onPress={addWorkoutz} />
+      <Button color="orange" title="Add Workout" onPress={addWorkoutz} />
     </View>
   );
 };

@@ -60,8 +60,8 @@ const ExercisesScreen = (navigation) => {
         placeholder="Exercise YT Link"
         keyboardType="text"
       />
-      <Button title="Add Item" onPress={addItem} />
-      <Button title="Wipe Items" onPress={wipeItems} />
+      <Button color="orange" title="Add Item" onPress={addItem} />
+      <Button color="orange" title="Wipe Items" onPress={wipeItems} />
       <ScrollView>
         {items.map((item) => (
           <View key={item.id} style={styles.exerciseView}>

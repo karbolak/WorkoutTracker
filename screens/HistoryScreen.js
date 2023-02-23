@@ -19,7 +19,7 @@ const HistoryScreen = (navigation) => {
 
   return (
     <View>
-      <Button title="Wipe Workouts" onPress={wipeWorkouts} />
+      <Button color="orange" title="Wipe Workouts" onPress={wipeWorkouts} />
       <ScrollView>
         {loading ? (
           <Text>"Loading..."</Text>

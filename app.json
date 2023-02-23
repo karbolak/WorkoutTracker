@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "WorkoutTracker",
-    "slug": "WorkoutTracker",
+    "slug": "workouttracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,16 +18,24 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.karbolak.workouttracker"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.karbolak.workouttracker"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9a3dd03c-277c-4e7e-82f8-e19e9f2d2dcb"
+      }
+    },
+    "owner": "karbolak"
   }
 }

@@ -10,46 +10,26 @@ import {
   Settings,
 } from "react-native";
 import * as SQLite from "expo-sqlite";
+import { database } from "../utils/database";
 
 const NewWorkoutScreen = (navigation) => {
-  const db = SQLite.openDatabase("MyDatabase.db");
   const [tempId, setTempID] = useState(-1);
   const [tempName, setTempName] = useState("");
   const [items, setItems] = useState([]);
   const [workoutz, setWorkoutz] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [workoutName, setWorkoutName] = React.useState(null);
+  const [workoutName, setWorkoutName] = useState(null);
 
   useEffect(() => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        `CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY NOT NULL AUTOINCREMENT, name TEXT, type TEXT, description TEXT);`
-      );
-    });
+    if (!database) {
+      const db = openDatabase("Database.sqlite3");
+      setDatabase(db);
+    }
+  }, []);
 
-    db.transaction((tx) => {
-      tx.executeSql(
-        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, work_name TEXT, ex_1 TEXT);`
-      );
-    });
-
-    db.transaction((tx) => {
-      tx.executeSql(
-        "SELECT * FROM items",
-        null,
-        (txObj, resultSet) => setItems(resultSet.rows._array),
-        (txObj, error) => console.log(error)
-      );
-    });
-
-    db.transaction((tx) => {
-      tx.executeSql(
-        "SELECT * FROM workoutz",
-        null,
-        (txObj, resultSet) => setWorkoutz(resultSet.rows._array),
-        (txObj, error) => console.log(error)
-      );
-    });
+  useEffect(() => {
+    database.items.getAll(setItems);
+    database.workouts.getAll(setWorkoutz);
     setLoading(false);
   }, []);
 
@@ -57,23 +37,18 @@ const NewWorkoutScreen = (navigation) => {
     setTempName(name);
   };
 
+  const loadWorkouts = () => {
+    database.workouts.getAll(setWorkoutz);
+  };
+
   const addWorkoutz = () => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "INSERT INTO workoutz (work_name, ex_1) values (?, ?);",
-        [workoutName, tempName],
-        (txObj, resultSet) => {
-          const newWorkoutz = [
-            ...workoutz,
-            {
-              work_name: workoutName,
-              ex_1: tempName,
-            },
-          ];
-          setWorkoutz(newWorkoutz);
-        }
-      );
-    });
+    database.workouts.insert(
+      {
+        name: workoutName,
+        ex_1: tempName,
+      },
+      loadWorkouts
+    );
   };
 
   return (

@@ -1,34 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Button, View, Text, StyleSheet, ScrollView } from "react-native";
 import * as SQLite from "expo-sqlite";
+import { database } from "../utils/database";
 
 const HistoryScreen = (navigation) => {
-  const db = SQLite.openDatabase("MyDatabase.db");
   const [tempId, setTempID] = useState(-1);
   const [workoutz, setWorkoutz] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const wipeWorkouts = () => {
-    db.transaction((tx) => {
-      tx.executeSql("DELETE FROM workoutz;");
-    });
+    database.workouts.wipe();
   };
 
   useEffect(() => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        `CREATE TABLE IF NOT EXISTS workoutz (work_id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, work_name TEXT, ex_1 TEXT);`
-      );
-    });
-
-    db.transaction((tx) => {
-      tx.executeSql(
-        "SELECT * FROM workoutz",
-        null,
-        (txObj, resultSet) => setWorkoutz(resultSet.rows._array),
-        (txObj, error) => console.log(error)
-      );
-    });
+    database.workouts.getAll(setWorkoutz);
     setLoading(false);
   }, []);
 

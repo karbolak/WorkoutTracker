@@ -10,65 +10,31 @@ import {
 } from "react-native";
 import * as SQLite from "expo-sqlite";
 import { color } from "react-native-reanimated";
+import { database } from "../utils/database";
 
 const ExercisesScreen = (navigation) => {
-  const [database, setDatabase] = useState();
   const [items, setItems] = useState([]);
-  const [exerciseName, setExerciseName] = React.useState(null);
-  const [exerciseType, setExerciseType] = React.useState(null);
-  const [exerciseDescription, setExerciseDescription] = React.useState(null);
-
-  useEffect(() => {
-    if (!database) {
-      const db = SQLite.openDatabase("MyDatabase.db");
-      setDatabase(db);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (database) {
-      database.transaction(
-        (tx) => {
-          tx.executeSql(
-            "create table if not exists items (id integer primary key not null AUTOINCREMENT, name text, type text, description text);"
-          );
-        },
-        null,
-        loadItems
-      );
-    }
-  }, [database]);
+  const [exerciseName, setExerciseName] = useState(null);
+  const [exerciseType, setExerciseType] = useState(null);
+  const [exerciseDescription, setExerciseDescription] = useState(null);
 
   const loadItems = () => {
-    database.transaction((tx) => {
-      tx.executeSql("select * from items;", [], (_, { rows: { _array } }) => {
-        setItems(_array);
-        console.log(_array);
-      });
-    });
+    database.items.getAll(setItems);
   };
 
   const addItem = () => {
-    database.transaction(
-      (tx) => {
-        tx.executeSql(
-          "insert into items (name, type, description) values (?, ?, ?);",
-          [exerciseName, exerciseType, exerciseDescription]
-        );
+    database.items.insert(
+      {
+        name: exerciseName,
+        type: exerciseType,
+        description: exerciseDescription,
       },
-      null,
       loadItems
     );
   };
 
   const wipeItems = () => {
-    database.transaction(
-      (tx) => {
-        tx.executeSql("DELETE FROM Items;");
-      },
-      null,
-      loadItems
-    );
+    database.items.wipe(loadItems);
   };
 
   return (
